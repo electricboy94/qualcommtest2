@@ -11,37 +11,37 @@ logger = logging.getLogger(__name__)
 class SensorServer(Thread):
     """Sensor server that keeps reading sensors and provide get_sensor_output() method for user"""
 
-    def __init__(self):                       # consturcter 이다, 초기화
+    def __init__(self):
         # Parent class constructor
         Thread.__init__(self)
 
         # Assign GPIO pins that controls MUX, LSB to MSB
-        self.gpio_pins = [24, 25, 26, 27]     # 먹스에 저거네개를 끼운다 (사진)
-        self.gpio = Gpio()              # 새 Gpio 라이브러리
+        self.gpio_pins = [24, 25, 26, 27]
+        self.gpio = Gpio()
         # Set GPIO pins to output
         try:
             for pin in self.gpio_pins:
-                self.gpio.pinMode(pin, self.gpio.OUTPUT)   # 24 245 26 27 아웃풋
+                self.gpio.pinMode(pin, self.gpio.OUTPUT)
         except Exception as e:
             logger.error("Error setting GPIO pin, reason %s" % e.message)
             print "Error setting GPIO pin %d, reason %s" % e.message
 
         # Use A0 port
-        self.adc_raw = "/sys/bus/iio/devices/iio:device0/in_voltage0_raw"    #ADC로 읽은 파일 연다
+        self.adc_raw = "/sys/bus/iio/devices/iio:device0/in_voltage0_raw"
         self.adc_scale = "/sys/bus/iio/devices/iio:device0/in_voltage_scale"
 
-        self.sensor_names = ['Temp', 'SN1', 'SN2', 'SN3', 'SN4', 'PM25']     # 센서네임
+        self.sensor_names = ['Temp', 'SN1', 'SN2', 'SN3', 'SN4', 'PM25']
 
         # Use a dict to store sensor output, the format is:
         # { "time": [time stamp],
         #   [sensor1 name]: [sensor1 output],
         #   ...
         #   [sensor6 name]: [sensor6 output]}
-        self.sensor_output = {}         #아웃풋에 대한 새로운 오브젝트만들고
+        self.sensor_output = {}
 
         # Create a lock to protect sensor output. That is, when updating the result, lock it on to prevent it from being
         # read at the same time; similarly, when reading the result, lock it on to prevent it from being updated.
-        self.sensor_output_lock = Lock()     # 멀티플 트레드 가질때  막는다... ? 한번에 많은 쓰레드가 ? 컨넥하는것ㅇ르 막는다 . 이상한값 안나오게하려고 하는듯
+        self.sensor_output_lock = Lock()
 
         self.db_conn = sqlite3.connect("air_pollution_data.db")
         self.db_cur = self.db_conn.cursor()
@@ -52,7 +52,7 @@ class SensorServer(Thread):
         # Get the latest sensor output
         return self.sensor_output.copy()
 
-    def set_mux_channel(self, m):                    #먹스체널 정한다. example 15 =1111 .
+    def set_mux_channel(self, m):
         # Set MUX channel
         # Convert n into a binary string
         bin_repr = "{0:04b}".format(m)
@@ -82,7 +82,7 @@ class SensorServer(Thread):
             print "Error reading sensor %d, reason: %s" % (n, e.message)
             return 0.0, 0.0
 
-    def run(self):                          # 루프 계속 진행
+    def run(self):
         # Keep reading sensors
         while True:
             # Acquire the lock
@@ -98,7 +98,7 @@ class SensorServer(Thread):
             for i in xrange(0, 6):
                 logger.info("Reading %s sensor..." % self.sensor_names[i])
                 print "Reading %s sensor..." % self.sensor_names[i]
-                v1, v2 = self.read_sensor(i)       #   63 번에 n이 여기서 i 야
+                v1, v2 = self.read_sensor(i)
                 self.sensor_output[self.sensor_names[i]] = v1 - v2
 
             self.sensor_output_lock.release()
