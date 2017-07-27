@@ -1,6 +1,6 @@
 # Introduction
 
-Build a Bluetooth echo server using that prints messages
+Build an asynchronous Bluetooth echo server using that prints messages
 received and send them back through Bluetooth channel.
 
 # Required Python Modules
@@ -40,7 +40,7 @@ $ sudo sdptool add sp
 # Usage
 Run the following command on an UDOO Neo to start RFCOMM server:
 ```
-$ python rfcomm-server.py
+$ python btserver.py
 ```
 
 # FAQ
