@@ -22,8 +22,8 @@ if __name__ == '__main__':
             # Use a copy() to get the copy of the set, avoiding 'set change size during iteration' error
             # Create CSV message "'realtime', time, temp, SN1, SN2, SN3, SN4, PM25\n"
             msg = "realtime, %d, %f, %f, %f, %f, %f, %f\n" % \                  # csv 메세지
-                  (int(time()),         # epoch time                            리얼타임
-                   uniform(20, 30),     # random temperature                    값
+                  (int(time()),         # epoch time                           # 리얼타임
+                   uniform(20, 30),     # random temperature                   # 값
                    uniform(40, 50),     # random SN1 value
                    uniform(60, 70),     # random SN2 value
                    uniform(80, 90),     # random SN3 value
