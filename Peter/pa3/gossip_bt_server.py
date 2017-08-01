@@ -45,10 +45,10 @@ if __name__ == '__main__':
                 output = {'type': 'realtime',
                           'time': epoch_time,
                           'temp': temp,
-                          'SN1': CO,
-                          'SN2': NO2,
-                          'SN3': SO2,
-                          'SN4': O3,
+                          'CO': SN1,
+                          'NO2':SN2,
+                          'SO2':SN3,
+                          'O3': SN4,
                           'PM25': PM25,
                           }
                 msg = json.dumps(output)
