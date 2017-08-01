@@ -44,11 +44,13 @@ if __name__ == '__main__':
             elif args.output_format == "json":
                 output = {'type': 'realtime',
                           'time': epoch_time,
-                          'SN1': SN1,
-                          'SN2': SN2,
-                          'SN3': SN3,
-                          'SN4': SN4,
-                          'PM25': PM25}
+                          'temp': temp,
+                          'SN1': CO,
+                          'SN2': NO2,
+                          'SN3': SO2,
+                          'SN4': O3,
+                          'PM25': PM25,
+                          }
                 msg = json.dumps(output)
             try:
                 client_handler.send(msg + '\n')
