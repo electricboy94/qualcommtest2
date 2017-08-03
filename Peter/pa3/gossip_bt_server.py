@@ -44,7 +44,7 @@ if __name__ == '__main__':
             elif args.output_format == "json":
                 output = {'type': 'realtime',
                           'time': epoch_time,
-                          'temp': round(temp,2),
+                          'TEMP': round(temp,2),
                           'CO': round(SN1,2),
                           'NO2': round(SN2,2),
                           'SO2': round(SN3,2),
