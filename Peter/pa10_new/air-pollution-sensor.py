@@ -64,7 +64,7 @@ if __name__ == '__main__':
             # Create JSON message.
             output = {'type': 'real-time',
                       'time': epoch_time,
-                      'TEMP': temp,
+                      'temp': temp,
                       'CO': SN1,
                       'NO2': SN2,
                       'SO2': SN3,
