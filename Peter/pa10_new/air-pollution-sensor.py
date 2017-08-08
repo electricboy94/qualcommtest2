@@ -62,7 +62,7 @@ if __name__ == '__main__':
             msg = "real-time, {}, {}, {}, {}, {}, {}, {}".format(epoch_time, temp, SN1, SN2, SN3, SN4, PM25)
         elif args.output_format == "json":
             # Create JSON message.
-            output = {'MAC':'',
+            output = {'MAC':' 4e:71:9e:8c:89:00',
                      'type': 'real-time',
                       'time': epoch_time,
                       'temp': temp,
