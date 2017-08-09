@@ -190,8 +190,8 @@ class SensorServer(Thread):
             # Save output to the dict
             self.sensor_output[self.sensor_names[5]] = pm25
 
-            self.db_cur.execute("INSERT INTO history VALUES ({}, {}, {}, {}, {}, {}, {})"
-                                .format(epoch_time, temp, sn1, sn2, sn3, sn4, pm25))
+            self.db_cur.execute("INSERT INTO history VALUES ({},{}, {}, {}, {}, {}, {}, {})"
+                                .format(' 4e:71:9e:8c:89:00',epoch_time, temp, sn1, sn2, sn3, sn4, pm25))
 
             self.db_conn.commit()
             self.sensor_output_lock.release()
