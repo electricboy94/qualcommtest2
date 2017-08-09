@@ -111,7 +111,7 @@ if __name__ == '__main__':
                     i = 0
                     for row in results:
                         i += 1
-                        h_msg = "{},{},{},{},{},{},{},{}".format(row[0], row[1], row[2], row[3], row[4], row[5], row[6],row[7])
+                        h_msg = "{},{},{},{},{},{},{},{}".format(' 4e:71:9e:8c:89:00', row[0], row[1], row[2], row[3], row[4], row[5], row[6])
                         client_handler.send('h' + h_msg + '\n')
 
                         print "INFO: Sending results ({}/{})...\r".format(i, n),
