@@ -90,6 +90,7 @@ if __name__ == '__main__':
                     # If start time is greater than end time, ignore the command.
                     logger.warn("Start time {} is greater than end time {}, skipping..."
                                 .format(fmt_start_time, fmt_end_time))
+
                     print "WARN: Start time {} is greater than end time {}, skipping..."\
                         .format(fmt_start_time, fmt_end_time)
                 elif db_cur is None:
