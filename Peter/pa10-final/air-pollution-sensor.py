@@ -52,7 +52,7 @@ if __name__ == '__main__':
         msg = ""
         sensor_output = sensor_server.get_sensor_output()
         epoch_time = int(time())                    # epoch time
-        temp = sensor_output.get('Temp', -1)
+        temp = sensor_output.get('temp', -1)
         SN1 = sensor_output.get('CO', -1)
         SN2 = sensor_output.get('NO2', -1)
         SN3 = sensor_output.get('SO2', -1)
