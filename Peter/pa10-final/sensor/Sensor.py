@@ -146,7 +146,7 @@ class SensorServer(Thread):
             #  n. set MUX to sensor n - 1, read sensor n - 1.
             logger.info("Reading {} sensor...".format(self.sensor_names[0]))
             # Temperature constant
-            t0 = 550
+            t0 = 450
             c0, c1 = self.read_sensor(0)
             # Channel 1 is not connected so we don't care about its output
             temp = c0 - t0
@@ -163,7 +163,7 @@ class SensorServer(Thread):
 
             logger.info("Reading {} sensor...".format(self.sensor_names[2]))
             c4, c5 = self.read_sensor(2)
-            sn2 = ((c4-295)-(1.18*(c5-282)))*4.386
+            sn2 = ((c4-295)-((-0.0548)*(c5-282)))*4.386
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[2], sn2))
             # Save output to the dict
 
@@ -171,21 +171,21 @@ class SensorServer(Thread):
 
             logger.info("Reading {} sensor...".format(self.sensor_names[3]))
             c6, c7 = self.read_sensor(3)
-            sn3 = ((c6-345)-(1.15*(c7-255)))*3.145
+            sn3 = ((c6-345)-((-0.062)*(c7-255)))*3.145
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[3], sn3))
             # Save output to the dict
             self.sensor_output[self.sensor_names[3]] = sn3
 
             logger.info("Reading {} sensor...".format(self.sensor_names[4]))
             c8, c9 = self.read_sensor(4)
-            sn4 =((c8-391)-(0.18*(c9-390)))*2.506
+            sn4 =((c8-391)-((0.511)*(c9-390)))*2.506
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[4], sn4))
             # Save output to the dict
             self.sensor_output[self.sensor_names[4]] = sn4
 
             logger.info("Reading {} sensor...".format(self.sensor_names[5]))
             c10, c11 = self.read_sensor(5)
-            c10 = c10 * 1000
+
             pm25 = 0.518 + 0.00274*(240.0*(c10)**6 - 2491.3*(c10)**5 + 9448.7*(c10)**4 - 14840.0*(c10)**3 + 10684.0*(c10)**2 + 2211.8*(c10) + 7.9623)
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[5], pm25))
             # Save output to the dict
