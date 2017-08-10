@@ -171,7 +171,7 @@ class SensorServer(Thread):
 
             logger.info("Reading {} sensor...".format(self.sensor_names[2]))
             c4, c5 = self.read_sensor(2)
-            sn2 = ((c4-295)-((0.15)*(c5-282)))*4.386
+            sn2 = ((c4-295)-((0.3)*(c5-282)))*4.386
             if (sn2 >= 0):
                 sn2 = sn2
             else:
