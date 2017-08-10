@@ -67,12 +67,12 @@ if __name__ == '__main__':
             # Create JSON message.
             output = {'MAC': ' 4e:71:9e:8c:89:00',
                       'time': epoch_time,
-                      'temp': temp,
-                      'CO': SN1,
-                      'NO2': SN2,
-                      'SO2': SN3,
-                      'O3': SN4,
-                      'PM25': PM25}
+                      'temp': round(temp,2),
+                      'CO': round(SN1,2),
+                      'NO2': round(SN2,2),
+                      'SO2': round(SN3,2),
+                      'O3': round(SN4,2),
+                      'PM25': round(PM25,2)}
             r_msg = json.dumps(output)
 
         for client_handler in bt_server.get_active_client_handlers():
@@ -112,7 +112,7 @@ if __name__ == '__main__':
                     i = 0
                     for row in results:
                         i += 1
-                        h_msg = "{},{},{},{},{},{},{},{}".format(' 4e:71:9e:8c:89:00', row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+                        h_msg = "{},{},{},{},{},{},{},{}".format(' 4e:71:9e:8c:89:00', round(row[0],2), round(row[1],2), round(row[2],2), round(row[3],2), round(row[4],2), round(row[5],2), round(row[6],2))
                         client_handler.send('h' + h_msg + '\n')
 
                         print "INFO: Sending results ({}/{})...\r".format(i, n),
