@@ -157,7 +157,7 @@ class SensorServer(Thread):
 
             logger.info("Reading {} sensor...".format(self.sensor_names[1]))
             c2, c3 = self.read_sensor(1)
-            sn1 = ((c2 - 295) - ((-0.9) * (c3 - 282))) * 4.386
+            sn1 = ((c2 - 295) - ((-0.9) * (c3 - 282))) * 4.386*10**(-2)
 
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[1], sn1))
             # Save output to the dict
@@ -167,7 +167,7 @@ class SensorServer(Thread):
 
             logger.info("Reading {} sensor...".format(self.sensor_names[2]))
             c4, c5 = self.read_sensor(2)
-            sn2 = ((c4 - 391) - ((1.3) * (c5 - 390))) * 2.506
+            sn2 = ((c4 - 391) - ((1.3) * (c5 - 390))) * 2.506*10**(-1)
             sn2 = sn2 if (sn2 >= 0) else -sn2
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[2], sn2))
             # Save output to the dict
@@ -184,7 +184,7 @@ class SensorServer(Thread):
 
             logger.info("Reading {} sensor...".format(self.sensor_names[4]))
             c8, c9 = self.read_sensor(4)
-            sn4 = ((c8 - 345) - ((1.5) * (c9 - 255))) * 3.145
+            sn4 = ((c8 - 345) - ((1.5) * (c9 - 255))) * 3.145*10**(-2)
             sn4 = sn4 if (sn4 >= 0) else -sn4
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[4], sn4))
             # Save output to the dict
