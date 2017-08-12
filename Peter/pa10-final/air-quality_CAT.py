@@ -76,7 +76,7 @@ if __name__ == '__main__':
             r_msg = json.dumps(output)
 
         for client_handler in bt_server.get_active_client_handlers():
-            # Use a copy() to get the copy of the set, avoiding 'set change size during iteration' error.
+            # Use a copy() to get the copy of the set, avoiding 'set change size during iteration' error.dd
             if client_handler.sending_status.get('history')[0]:
                 start_time = client_handler.sending_status.get('history')[1]
                 end_time = client_handler.sending_status.get('history')[2]
