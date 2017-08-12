@@ -53,10 +53,10 @@ if __name__ == '__main__':
         sensor_output = sensor_server.get_sensor_output()
         epoch_time = int(time())                    # epoch time
         temp = sensor_output.get('temp', -1)
-        SN1 = sensor_output.get('CO', -1)
-        SN2 = sensor_output.get('NO2', -1)
-        SN3 = sensor_output.get('SO2', -1)
-        SN4 = sensor_output.get('O3', -1)
+        SN1 = sensor_output.get('NO2', -1)
+        SN2 = sensor_output.get('O3', -1)
+        SN3 = sensor_output.get('CO', -1)
+        SN4 = sensor_output.get('SO2', -1)
         PM25 = sensor_output.get('PM25', -1)
 
         r_msg = ""
@@ -68,10 +68,10 @@ if __name__ == '__main__':
             output = {'MAC': ' 4e:71:9e:8c:89:00',
                       'time': epoch_time,
                       'temp': round(temp,2),
-                      'CO': round(SN1,2),
-                      'NO2': round(SN2,2),
-                      'SO2': round(SN3,2),
-                      'O3': round(SN4,2),
+                      'NO2': round(SN1,2),
+                      'O3': round(SN2,2),
+                      'CO': round(SN3,2),
+                      'SO2': round(SN4,2),
                       'PM25': round(PM25,2)}
             r_msg = json.dumps(output)
 
