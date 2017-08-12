@@ -176,7 +176,7 @@ class SensorServer(Thread):
 
             logger.info("Reading {} sensor...".format(self.sensor_names[3]))
             c6, c7 = self.read_sensor(3)
-            sn3 = ((c6 - 347) - (0.44 * (c7 - 296))) * 0.0375
+            sn3 = ((c6 - 347) - (0.7 * (c7 - 296))) * 0.0375
             sn3 = sn3 if (sn3 >= 0) else -sn3
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[3], sn3))
             # Save output to the dict
