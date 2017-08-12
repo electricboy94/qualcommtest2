@@ -146,7 +146,7 @@ class SensorServer(Thread):
             #  n. set MUX to sensor n - 1, read sensor n - 1.
             logger.info("Reading {} sensor...".format(self.sensor_names[0]))
             # Temperature constant
-            t0 = 450
+            t0 = 500
             c0, c1 = self.read_sensor(0)
             # Channel 1 is not connected so we don't care about its output
             temp = c0 - t0
@@ -163,9 +163,11 @@ class SensorServer(Thread):
             # Save output to the dict
             self.sensor_output[self.sensor_names[1]] = sn1
 
+
+
             logger.info("Reading {} sensor...".format(self.sensor_names[2]))
             c4, c5 = self.read_sensor(2)
-            sn2 = ((c4 - 391) - ((0.35) * (c5 - 390))) * 2.506
+            sn2 = ((c4 - 391) - ((0.2) * (c5 - 390))) * 2.506
             sn2 = sn2 if (sn2 >= 0) else -sn2
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[2], sn2))
             # Save output to the dict
