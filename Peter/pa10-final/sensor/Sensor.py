@@ -149,7 +149,7 @@ class SensorServer(Thread):
             t0 = 500
             c0, c1 = self.read_sensor(0)
             # Channel 1 is not connected so we don't care about its output
-            temp = c0 - t0
+            temp = (c0 - t0)*10**(-2)
             temp = temp if (temp >= 0) else -temp
             logger.info("{} sensor outputs {} degree".format(self.sensor_names[0], temp))
             # Save output to the dict
@@ -157,7 +157,7 @@ class SensorServer(Thread):
 
             logger.info("Reading {} sensor...".format(self.sensor_names[1]))
             c2, c3 = self.read_sensor(1)
-            sn1 = ((c2 - 295) - ((0.75) * (c3 - 282))) * 4.386
+            sn1 = ((c2 - 295) - ((1.8) * (c3 - 282))) * 4.386
             sn1 = sn1 if (sn1 >= 0) else -sn1
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[1], sn1))
             # Save output to the dict
@@ -167,7 +167,7 @@ class SensorServer(Thread):
 
             logger.info("Reading {} sensor...".format(self.sensor_names[2]))
             c4, c5 = self.read_sensor(2)
-            sn2 = ((c4 - 391) - ((0.5) * (c5 - 390))) * 2.506
+            sn2 = ((c4 - 391) - ((1.3) * (c5 - 390))) * 2.506
             sn2 = sn2 if (sn2 >= 0) else -sn2
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[2], sn2))
             # Save output to the dict
@@ -176,7 +176,7 @@ class SensorServer(Thread):
 
             logger.info("Reading {} sensor...".format(self.sensor_names[3]))
             c6, c7 = self.read_sensor(3)
-            sn3 = ((c6 - 347) - (0.7 * (c7 - 296))) * 0.0375
+            sn3 = ((c6 - 347) - (0.9 * (c7 - 296))) * 0.0375
             sn3 = sn3 if (sn3 >= 0) else -sn3
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[3], sn3))
             # Save output to the dict
@@ -193,7 +193,7 @@ class SensorServer(Thread):
             logger.info("Reading {} sensor...".format(self.sensor_names[5]))
             c10, c11 = self.read_sensor(5)
 
-            pm25 = 0.518 + 0.00274*(240.0*(c10)**6 - 2491.3*(c10)**5 + 9448.7*(c10)**4 - 14840.0*(c10)**3 + 10684.0*(c10)**2 + 2211.8*(c10) + 7.9623)*1.5*10**(-16)
+            pm25 = 0.518 + 0.00274*(240.0*(c10)**6 - 2491.3*(c10)**5 + 9448.7*(c10)**4 - 14840.0*(c10)**3 + 10684.0*(c10)**2 + 2211.8*(c10) + 7.9623)*1.5*2.7*10**(-20)
             logger.info("{} sensor outputs {} ppb".format(self.sensor_names[5], pm25))
             # Save output to the dict
             self.sensor_output[self.sensor_names[5]] = pm25
