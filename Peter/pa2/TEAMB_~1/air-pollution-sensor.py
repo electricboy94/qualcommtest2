@@ -62,10 +62,10 @@ if __name__ == '__main__':
         r_msg = ""
         if args.output_format == "csv":
             # Create CSV message "'real-time', time, temp, SN1, SN2, SN3, SN4, PM25".
-            r_msg = "{},{},{},{},{},{},{},{}".format('4e:71:9e:8c:88:fd', round(epoch_time,1), round(temp,1), round(SN1,1), round(SN2,1), round(SN3,1), round(SN4,1), round(PM25,1))
+            r_msg = "{},{},{},{},{},{},{},{}".format(' 4e:71:9e:8c:89:00', round(epoch_time,1), round(temp,1), round(SN1,1), round(SN2,1), round(SN3,1), round(SN4,1), round(PM25,1))
         elif args.output_format == "json":
             # Create JSON message.
-            output = {'MAC':'4e:71:9e:8c:88:fd',
+            output = {'MAC':' 4e:71:9e:8c:89:00',
                       'time': epoch_time,
                       'temp': round(temp,1),
                       'NO2': round(SN1, 1),
@@ -113,7 +113,7 @@ if __name__ == '__main__':
                     for row in results:
                         i += 1
 
-                        h_msg = "{},{},{},{},{},{},{},{}".format('4e:71:9e:8c:88:fd',row[0], round(row[1],1), round(row[2],1), round(row[3],1), round(row[4],1), round(row[5],1), round(row[6],1))
+                        h_msg = "{},{},{},{},{},{},{},{}".format(' 4e:71:9e:8c:89:00',row[0], round(row[1],1), round(row[2],1), round(row[3],1), round(row[4],1), round(row[5],1), round(row[6],1))
                         client_handler.send('h' + h_msg + '\n')
 
                         print "INFO: Sending results ({}/{})...\r".format(i, n),
