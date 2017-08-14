@@ -17,10 +17,12 @@ if __name__ == '__main__':
     # Create option parser
     usage = "usage: %prog [options] arg"
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", dest="output_format", default="csv",
+    parser.add_argument("--output", dest="output_format", default="json",
                         help="set output format: csv, json")
     parser.add_argument("--database", dest="database_name", default="air_pollution_data.db",
                         help="specify database file")
+    parser.add_argument("--baud-rate", dest="baud_rate", default=115200,
+                        help="specify Bluetooth baud rate in bps")
 
     args = parser.parse_args()
 
@@ -49,49 +51,94 @@ if __name__ == '__main__':
     while True:
         msg = ""
         sensor_output = sensor_server.get_sensor_output()
-        epoch_time = int(time())                    # epoch time
-        temp = sensor_output.get('temp', -1)
-        SN1 = sensor_output.get('CO', -1)
-        SN2 = sensor_output.get('NO2', -1)
-        SN3 = sensor_output.get('SO2', -1)
-        SN4 = sensor_output.get('O3', -1)
-        PM25 = sensor_output.get('PM25', -1)
+        epoch_time = int(time())  # epoch time
+        #        temp = sensor_output.get('Temp', -1)
+        #        SN1 = sensor_output.get('SN1', -1)
+        #        SN2 = sensor_output.get('SN2', -1)
+        #        SN3 = sensor_output.get('SN3', -1)
+        #        SN4 = sensor_output.get('SN4', -1)
+        #        PM25 = sensor_output.get('PM25', -1)
+        temp = uniform(20, 30)  # random temperature
+        SN1 = uniform(25, 75)  # random SN1 value
+        SN2 = uniform(0, 200)  # random SN2 value
+        SN3 = uniform(0, 10)  # random SN3 value
+        SN4 = uniform(0, 130)  # random SN4 value
+        PM25 = uniform(0, 35)  # random PM25 value
 
+        r_msg = ""
         if args.output_format == "csv":
             # Create CSV message "'real-time', time, temp, SN1, SN2, SN3, SN4, PM25".
-            msg = "{}, {}, {}, {}, {}, {}, {}, {}".format( '4e:71:9e:8c:89:00',epoch_time, temp, SN1, SN2, SN3, SN4, PM25)
+            r_msg = "{},{},{},{},{},{},{},{}".format(' 4e:71:9e:8c:89:00',epoch_time, temp, SN1, SN2, SN3, SN4, PM25)
         elif args.output_format == "json":
             # Create JSON message.
-            output = {'MAC':' 4e:71:9e:8c:89:00',
-                     'type': 'real-time',
+            output = {'MAC': ' 4e:71:9e:8c:89:00',
                       'time': epoch_time,
-                      'temp': temp,
-                      'CO': SN1,
-                      'NO2': SN2,
-                      'SO2': SN3,
-                      'O3': SN4,
-                      'PM25': PM25}
-            msg = json.dumps(output)
-
-        # Attach a new line character at the end of the message
-        msg += '\n'
+                      'temp': round(temp,2),
+                      'NO2': round(SN1,2),
+                      'O3': round(SN2,2),
+                      'CO': round(SN3,2),
+                      'SO2': round(SN4,2),
+                      'PM25': round(PM25,2)}
+            r_msg = json.dumps(output)
 
         for client_handler in bt_server.get_active_client_handlers():
-            # Use a copy() to get the copy of the set, avoiding 'set change size during iteration' error
+            # Use a copy() to get the copy of the set, avoiding 'set change size during iteration' error.dd
             if client_handler.sending_status.get('history')[0]:
                 start_time = client_handler.sending_status.get('history')[1]
                 end_time = client_handler.sending_status.get('history')[2]
-                logger.info("Client requests history between {} and {}"
-                            .format(strftime("%Y-%m-%d %H:%M:%S", gmtime(start_time)),
-                                    strftime("%Y-%m-%d %H:%M:%S", gmtime(end_time))))
-                print "Client requests history between {} and {}"\
-                    .format(strftime("%Y-%m-%d %H:%M:%S", gmtime(start_time)),
-                            strftime("%Y-%m-%d %H:%M:%S", gmtime(end_time)))
+                fmt_start_time = strftime("%Y-%m-%d %H:%M:%S", gmtime(start_time))
+                fmt_end_time = strftime("%Y-%m-%d %H:%M:%S", gmtime(end_time))
+
+                logger.info("Client requests history between {} and {}".format(fmt_start_time, fmt_end_time))
+                print "INFO: Client requests history between {} and {}".format(fmt_start_time, fmt_end_time)
+
+                if start_time > end_time:
+                    # If start time is greater than end time, ignore the command.
+                    logger.warn("Start time {} is greater than end time {}, skipping..."
+                                .format(fmt_start_time, fmt_end_time))
+
+                    print "WARN: Start time {} is greater than end time {}, skipping..."\
+                        .format(fmt_start_time, fmt_end_time)
+                elif db_cur is None:
+                    logger.error("SQL database {} is not available, skipping...".format(args.database_name))
+                    print "ERROR: SQL database {} is not available, skipping...".format(args.database_name)
+                else:
+                    # If start time is smaller than or equal to end time AND SQL database is available, do SQL query
+                    # from the database.
+                    db_cur.execute("SELECT * FROM history WHERE time >= {} AND time <= {}".format(start_time, end_time))
+                    # Get the result
+                    results = db_cur.fetchall()
+                    n = len(results)
+
+                    logger.info("Number of data points in the results is {}, sending them at {} bps"
+                                .format(n, args.baud_rate))
+                    print "INFO: Number of data points in the results is {}, sending them at {} bps"\
+                        .format(n, args.baud_rate)
+
+                    i = 0
+                    for row in results:
+                        i += 1
+                        h_msg = "{},{},{},{},{},{},{},{}".format('4e:71:9e:8c:89:00', round(row[0],2), round(row[1],2), round(row[2],2), round(row[3],2), round(row[4],2), round(row[5],2), round(row[6],2))
+                        client_handler.send('h' + h_msg + '\n')
+
+                        print "INFO: Sending results ({}/{})...\r".format(i, n),
+                        # A character is 8-bit long, so the whole string has (len(h_msg) + 2) * 8 bits; the default
+                        # baud rate for HC-05 standard is 9600, so the time for the Bluetooth socket to process the
+                        # string is (len(h_msg) + 2) * 8 / args.baud_rate; we add 10% margin to this time and wait for
+                        # such a long time before we send the next row.
+                        sleep(((len(h_msg) + 2) * 8 * 1.1 / int(args.baud_rate)))
+
+                    # Send end-of-message indicator
+                    print "\nINFO: Done"
+                    client_handler.send("h\n")
+
                 # Reset history status
                 client_handler.sending_status['history'] = [False, -1, -1]
             elif client_handler.sending_status.get('real-time'):
                 try:
-                    client_handler.send(msg)
+                    # Add the leading character 'r' to indicate its a real-time data, and a newline character '\n'
+                    # to indicate the end of the line
+                    client_handler.send('r' + r_msg + '\n')
                 except Exception as e:
                     BTError.print_error(handler=client_handler, error=BTError.ERR_WRITE, error_message=repr(e))
                     client_handler.handle_close()
